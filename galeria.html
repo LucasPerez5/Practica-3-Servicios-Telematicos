@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Galería Meteorológica - Smart Room</title>
+    <link rel="stylesheet" href="css/iroom.css">
+    
+    <!-- Importamos la librería jQuery obligatoria para la práctica -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <main>
+        <header>  
+            <h1>Galería de Estaciones</h1>
+        </header>
+
+        <div class="menu-info">
+            <nav>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="#">Habitación</a></li>
+                    <li><a href="#">Sensores</a></li>
+                    <li><a href="minombre.html">Nombre</a></li>
+                    <li><a href="config.html">Configuración</a></li>
+                    <li><a href="calculadora.html">Calculadora</a></li>
+                    <li><a href="galeria.html">Galería</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <section class="seccion-centrada">
+            <h2>Imágenes del exterior de las estaciones</h2>
+            <p>Pasa el ratón sobre las imágenes para ver el nombre de la estación, o usa las flechas para desplazarte.</p>
+            
+            <div class="carrusel-wrapper">
+                <button class="flecha" id="btn-izq">&#10094;</button> 
+                
+                <div class="carrusel-contenedor" id="carrusel">
+                    <img src="https://via.placeholder.com/400x300/a5d7ff/003366?text=Alcala+de+Henares" alt="Estación UAH - Campus Científico">
+                    <img src="https://via.placeholder.com/400x300/a5d7ff/003366?text=Serracines" alt="Estación Serracines - Polideportivo">
+                    <img src="https://via.placeholder.com/400x300/a5d7ff/003366?text=Coslada" alt="Estación Coslada - Centro">
+                    <img src="https://via.placeholder.com/400x300/a5d7ff/003366?text=Madrid+Centro" alt="Estación Madrid - Retiro">
+                    <img src="https://via.placeholder.com/400x300/a5d7ff/003366?text=Torrejon" alt="Estación Torrejón de Ardoz">
+                    <img src="https://via.placeholder.com/400x300/a5d7ff/003366?text=Guadalajara" alt="Estación Guadalajara">
+                </div>
+                
+                <button class="flecha" id="btn-der">&#10095;</button> 
+            </div>
+            
+            <div id="info-imagen"></div>
+        </section>
+
+        <footer>
+            <a href="index.html">Volver a la página principal</a>
+            <br><br>
+            Universidad de Alcalá
+        </footer>
+    </main>
+
+    <script>
+        $(document).ready(function() {
+            $('.carrusel-contenedor img').hover(
+                function(e) {
+                    var texto = $(this).attr('alt');
+                    $('#info-imagen').text(texto).css({
+                        top: e.pageY + 15 + 'px',
+                        left: e.pageX + 15 + 'px'
+                    }).fadeIn('fast');
+                }, 
+                function() {
+                    $('#info-imagen').fadeOut('fast');
+                }
+            );
+
+            $('.carrusel-contenedor img').mousemove(function(e) {
+                $('#info-imagen').css({
+                    top: e.pageY + 15 + 'px',
+                    left: e.pageX + 15 + 'px'
+                });
+            });
+
+            var anchoDesplazamiento = 265;
+
+            $('#btn-der').click(function() {
+                $('#carrusel').animate({ scrollLeft: '+=' + anchoDesplazamiento }, 'slow');
+            });
+            
+            $('#btn-izq').click(function() {
+                $('#carrusel').animate({ scrollLeft: '-=' + anchoDesplazamiento }, 'slow');
+            });
+        });
+    </script>
+</body>
+</html>

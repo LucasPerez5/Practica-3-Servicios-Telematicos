@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Configuración - Smart Room</title>
+        <link rel="stylesheet" href="css/iroom.css">
+    </head>
+
+    <body>
+        <main>
+            <header>  
+                <h1>Configuración de la Habitación</h1>
+            </header>
+            
+            <form id="formularioConfig" action="datos.js" method="POST" onsubmit="return validarFormulario()">
+                <div class="contenedor-columnas">
+                    
+                    <!-- Columna izquierda -->
+                    <section>
+                        <h2>Datos de la habitación</h2>
+                        
+                        <p>
+                            <label for="pais">País:</label><br>
+                            <input list="lista-paises" id="pais" name="pais">
+                            <datalist id="lista-paises">
+                                <option value="España">
+                                <option value="Francia">
+                                <option value="Portugal">
+                                <option value="Italia">
+                            </datalist>
+                        </p>
+
+                        <p>
+                            <label for="ciudad">Ciudad:</label><br>
+                            <input type="text" id="ciudad" name="ciudad">
+                        </p>
+
+                        <p>
+                            <label for="gps">Coordenadas GPS:</label><br>
+                            <input type="text" id="gps" name="gps" placeholder="Ej: 40.513, -3.3486 o N 40° 30' 45'', O 3°...">
+                            <button type="button" onclick="generarMapa()" style="padding: 4px 8px; margin-left: 5px;">Generar URL</button>
+                        </p>
+
+                        <p>
+                            <label for="mapa">Mapa URL:</label><br>
+                            <input type="url" id="mapa" name="mapa" readonly> <!-- readonly para que no se edite a mano -->
+                            <a id="link_mapa" href="#" target="_blank" style="display:none; margin-left: 10px; font-size: 14px;">Ver en mapa</a>
+                        </p>
+
+                        <p>
+                            <label for="foto">Foto:</label><br>
+                            <input type="file" id="foto" name="foto">
+                        </p>
+
+                        <p>
+                            <label for="correo">Correo electrónico:</label><br>
+                            <input type="text" id="correo" name="correo">
+                            <br>
+                            <!-- Botones para las dos validaciones distintas -->
+                            <button type="button" onclick="validarCorreoManual()" style="margin-top: 5px;">Validar (Cadenas)</button>
+                            <button type="button" onclick="validarCorreoRegExp()" style="margin-top: 5px;">Validar (RegExp)</button>
+                        </p>
+
+                        <p id="resultado_correo"></p>
+
+                        <p>
+                            <label for="password">Password:</label><br>
+                            <input type="password" id="password" name="password" oninput="evaluarPassword()">
+                            <span id="indicador_pass" style="margin-left: 10px; font-weight: bold;"></span>
+                        </p>
+                    </section>
+                    
+                    <!-- Columna derecha -->
+                    <section>
+                        <h2>Seleccione los sensores</h2>
+                        
+                        <p>
+                            <input type="checkbox" id="sens_temp" name="sensores" value="temperatura">
+                            <label for="sens_temp">Temperatura</label><br>
+                            
+                            <input type="checkbox" id="sens_hum" name="sensores" value="humedad">
+                            <label for="sens_hum">Humedad</label><br>
+                            
+                            <input type="checkbox" id="sens_sonido" name="sensores" value="sonido">
+                            <label for="sens_sonido">Nivel de sonido</label><br>
+                            
+                            <input type="checkbox" id="sens_luz" name="sensores" value="luz">
+                            <label for="sens_luz">Nivel de luz</label><br>
+                            
+                            <input type="checkbox" id="sens_mov" name="sensores" value="movimiento">
+                            <label for="sens_mov">Movimiento</label>
+                        </p>
+
+                        <h2>Configure alertas</h2>
+
+                        <p>
+                            <label for="temp_actual">Temperatura actual (ºC):</label><br>
+                            <input type="number" id="temp_actual" name="temp_actual" step="0.1">
+                        </p>
+
+                        <p>
+                            <label for="temp_max">Temperatura máxima:</label><br>
+                            <input type="number" id="temp_max" name="temp_max" min="-20" max="45" step="1" oninput="calcular()">
+                        </p>
+                        
+                        <p>
+                            <label for="temp_min">Temperatura mínima:</label><br>
+                            <input type="number" id="temp_min" name="temp_min" min="-20" max="45" step="1" oninput="calcular()">
+                        </p>
+
+                        <p>
+                            <label for="temp_diff">Diferencia de temperatura:</label><br>
+                            <output id="temp_diff" name="temp_diff" class="saludo-destacado"></output>
+                        </p>
+                    </section>
+                </div>
+                
+                <div class="contenedor-boton">
+                    <button type="submit">Enviar datos</button>
+                </div>
+            </form>
+
+            <footer>
+                <a href="index.html">Volver a la página principal</a>
+                <br><br>
+                Universidad de Alcalá
+            </footer>
+        </main>
+        
+        <script>
+            var enviarFormularioPendiente = false;
+            var paisesValidos = ["españa", "francia", "italia", "portugal"];
+
+            function calcular() {
+                var max = document.getElementById("temp_max").value;
+                var min = document.getElementById("temp_min").value;
+                var resultado = document.getElementById("temp_diff"); 
+
+                if (max !== "" && min !== "") { 
+                    if (Number(max) < Number(min)) { 
+                        resultado.value = "Error: la máxima debe ser mayor que la mínima";
+                    } else {
+                        resultado.value = max - min;
+                    }
+                } else {
+                    resultado.value = ""; 
+                }
+            }
+
+            function mostrarModal(mensaje) {
+                document.getElementById("modalMensaje").innerHTML = mensaje;
+                document.getElementById("miModal").style.display = "flex";
+            }
+
+            function cerrarModal() {
+                document.getElementById("miModal").style.display = "none";
+                if (enviarFormularioPendiente) {
+                    enviarFormularioPendiente = false;
+                    document.getElementById("formularioConfig").submit();
+                }
+            }
+
+            function evaluarPassword() {
+                var pass = document.getElementById("password").value;
+                var indicador = document.getElementById("indicador_pass");
+                
+                if (pass.length === 0) {
+                    indicador.innerHTML = "";
+                } else if (pass.length < 9) {
+                    indicador.innerHTML = "Evaluación de longitud: Corta (mínimo 9)";
+                    indicador.style.color = "red";
+                } else if (pass.length <= 12) {
+                    indicador.innerHTML = "Evaluación de longitud: Media (9-12)";
+                    indicador.style.color = "orange";
+                } else {
+                    indicador.innerHTML = "Evaluación de longitud: Larga (+12)";
+                    indicador.style.color = "green";
+                }
+            }
+
+            function validarFormulario() {
+                var errores = [];
+                var advertencias = [];
+                enviarFormularioPendiente = false;
+
+                var paisInput = document.getElementById("pais").value.trim().toLowerCase();
+                if (paisInput === "") {
+                    errores.push("El campo país no puede estar vacío.");
+                } else if (paisesValidos.indexOf(paisInput) === -1) {
+                    errores.push("País erróneo. Seleccione uno de la lista.");
+                }
+
+                var tempActual = document.getElementById("temp_actual").value;
+                if (tempActual === "") {
+                    errores.push("El campo de temperatura actual es obligatorio.");
+                } else {
+                    var tempNum = parseFloat(tempActual);
+                    if (isNaN(tempNum)) {
+                        errores.push("La temperatura actual debe ser un número válido.");
+                    } else if (tempNum < 22 || tempNum > 26) {
+                        advertencias.push("Aviso: La temperatura actual está fuera del intervalo (22ºC - 26ºC).");
+                    }
+                }
+
+                var max = document.getElementById("temp_max").value;
+                var min = document.getElementById("temp_min").value;
+                if (max !== "" && min !== "" && Number(max) < Number(min)) {
+                    errores.push("La temperatura máxima debe ser mayor que la mínima.");
+                }
+
+                var password = document.getElementById("password").value;
+                if (password.length < 9) {
+                    errores.push("La contraseña debe tener al menos 9 caracteres.");
+                }
+
+                if (errores.length > 0) {
+                    mostrarModal(errores.join("<br>"));
+                    return false;
+                } else if (advertencias.length > 0) {
+                    enviarFormularioPendiente = true;
+                    mostrarModal(advertencias.join("<br>") + "<br><br><span style='color:black; font-weight:normal;'>El registro continuará al aceptar.</span>");
+                    return false;
+                }
+
+                return true;
+            }
+
+            function generarMapa() {
+                var gpsInput = document.getElementById("gps").value.trim();
+                var mapaInput = document.getElementById("mapa");
+                var linkMapa = document.getElementById("link_mapa");
+
+                if (gpsInput === "") {
+                    mostrarModal("Por favor, introduzca unas coordenadas GPS.");
+                    return;
+                }
+
+                var latDecimal = 0;
+                var lonDecimal = 0;
+
+                var regexDecimal = /^([-+]?\d+(\.\d+)?)\s*,\s*([-+]?\d+(\.\d+)?)$/;
+                var matchDecimal = gpsInput.match(regexDecimal);
+
+                var regexDMS = /([NS])\s*(\d+)[°º]\s*(\d+)'\s*([\d.]+)(?:"|'')\s*,\s*([EWO])\s*(\d+)[°º]\s*(\d+)'\s*([\d.]+)(?:"|'')/i;
+                var matchDMS = gpsInput.match(regexDMS);
+
+                if (matchDecimal) {
+                    latDecimal = parseFloat(matchDecimal[1]);
+                    lonDecimal = parseFloat(matchDecimal[3]);
+                } else if (matchDMS) {
+                    var latHemisferio = matchDMS[1].toUpperCase();
+                    var latGrados = parseFloat(matchDMS[2]);
+                    var latMinutos = parseFloat(matchDMS[3]);
+                    var latSegundos = parseFloat(matchDMS[4]);
+
+                    var lonHemisferio = matchDMS[5].toUpperCase();
+                    var lonGrados = parseFloat(matchDMS[6]);
+                    var lonMinutos = parseFloat(matchDMS[7]);
+                    var lonSegundos = parseFloat(matchDMS[8]);
+
+                    latDecimal = latGrados + (latMinutos / 60) + (latSegundos / 3600);
+                    if (latHemisferio === "S") latDecimal = latDecimal * -1;
+
+                    lonDecimal = lonGrados + (lonMinutos / 60) + (lonSegundos / 3600);
+                    if (lonHemisferio === "W" || lonHemisferio === "O") lonDecimal = lonDecimal * -1;
+                } else {
+                    mostrarModal("Formato no reconocido. Use formato decimal (40.5, -3.3) o GMS (N 40° 30' 45\", O 3° 20' 54\").");
+                    return;
+                }
+
+                var urlFinal = "https://maps.google.com/maps?q=" + latDecimal.toFixed(6) + "," + lonDecimal.toFixed(6);
+                
+                mapaInput.value = urlFinal;
+                linkMapa.href = urlFinal;
+                linkMapa.style.display = "inline";
+            }
+
+            function validarCorreoManual() {
+                var email = document.getElementById("correo").value.trim();
+
+                if (email.indexOf(" ") !== -1) {
+                    mostrarMensajeCorreo("Inválida (Contiene espacios)", "red");
+                    return;
+                }
+
+                var partes = email.split("@");
+                if (partes.length !== 2) {
+                    mostrarMensajeCorreo("Inválida (Debe tener una única @)", "red");
+                    return;
+                }
+
+                var usuario = partes[0];
+                var dominio = partes[1];
+
+                if (usuario === "" || dominio === "") {
+                    mostrarMensajeCorreo("Inválida (Falta el usuario o el dominio)", "red");
+                    return;
+                }
+
+                var primerPunto = dominio.indexOf(".");
+                var ultimoPunto = dominio.lastIndexOf(".");
+                
+                if (primerPunto === -1 || primerPunto === 0 || ultimoPunto === dominio.length - 1 || dominio.indexOf("..") !== -1) {
+                    mostrarMensajeCorreo("Inválida (El dominio debe tener al menos un punto intermedio)", "red");
+                    return;
+                }
+
+                mostrarMensajeCorreo("Válida (Verificado por Cadenas)", "green");
+            }
+
+            function validarCorreoRegExp() {
+                var email = document.getElementById("correo").value.trim();
+                var regex = /^[^\s@]+@([^\s@.]+\.)+[^\s@.]+$/;
+
+                if (email.search(regex) !== -1) {
+                    mostrarMensajeCorreo("Válida (Verificado por RegExp)", "green");
+                } else {
+                    mostrarMensajeCorreo("Inválida (Formato incorrecto según RegExp)", "red");
+                }
+            }
+
+            function mostrarMensajeCorreo(mensaje, color) {
+                var resultado = document.getElementById("resultado_correo");
+                resultado.innerHTML = mensaje;
+                resultado.style.color = color;
+                resultado.style.fontWeight = "bold";
+            }
+        </script>
+
+        <div id="miModal">
+            <div class="modal-contenido">
+                <h3>Aviso</h3>
+                <div id="modalMensaje"></div>
+                <button type="button" onclick="cerrarModal()">Aceptar</button>
+            </div>        
+        </div>
+    </body>    
+</html>

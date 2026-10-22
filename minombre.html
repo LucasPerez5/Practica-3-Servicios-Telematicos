@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Configurar Nombre - Smart Room</title>
+        <link rel="stylesheet" href="css/iroom.css">
+    </head>
+    <body>
+        <main>
+            <header>
+                <h1>Configurar Nombre de Usuario</h1>
+            </header>
+
+            <section class="seccion-centrada">
+                <h2>Introduce tus datos</h2>
+                <br>
+                <p>
+                    <label for="nombre">Nombre:</label><br>
+                    <input type="text" id="nombre">
+                </p>
+                <br>
+                <p>
+                    <label for="correo">Correo electrónico:</label><br>
+                    <input type="text" id="correo">
+                    <br>
+                    <button type="button" onclick="validarCorreoManual()" style="margin-top: 5px;">Validar (Cadenas)</button>
+                    <button type="button" onclick="validarCorreoRegExp()" style="margin-top: 5px;">Validar (RegExp)</button>
+                </p>
+                <p id="resultado_correo"></p>
+                <br>
+                <button onclick="guardarTodo()">Guardar</button>
+                
+                <p id="mensaje" class="saludo-destacado" style="margin-top: 15px;"></p>
+            </section>
+
+            <footer>
+                <a href="index.html">Volver a la página principal</a>
+                <br><br>
+                Universidad de Alcalá
+            </footer>
+        </main>
+
+<script>
+            function guardarTodo() {
+                var valorNombre = document.getElementById("nombre").value;
+                if (valorNombre.trim() !== "") {
+                    localStorage.setItem("fname", valorNombre);
+                    document.getElementById("mensaje").innerHTML = "¡Guardado correctamente!";
+                } else {
+                    document.getElementById("mensaje").innerHTML = "Por favor, introduce un nombre.";
+                }
+            }
+
+            function validarCorreoManual() {
+                var email = document.getElementById("correo").value.trim();
+                if (email.indexOf(" ") !== -1) {
+                    mostrarMensajeCorreo("Inválida (Contiene espacios)", "red");
+                    return;
+                }
+                var partes = email.split("@");
+                if (partes.length !== 2) {
+                    mostrarMensajeCorreo("Inválida (Debe tener una única @)", "red");
+                    return;
+                }
+                var usuario = partes[0];
+                var dominio = partes[1];
+                if (usuario === "" || dominio === "") {
+                    mostrarMensajeCorreo("Inválida (Falta el usuario o el dominio)", "red");
+                    return;
+                }
+                var primerPunto = dominio.indexOf(".");
+                var ultimoPunto = dominio.lastIndexOf(".");
+                if (primerPunto === -1 || primerPunto === 0 || ultimoPunto === dominio.length - 1 || dominio.indexOf("..") !== -1) {
+                    mostrarMensajeCorreo("Inválida (El dominio debe tener al menos un punto intermedio)", "red");
+                     return;
+                }
+                mostrarMensajeCorreo("Válida (Verificado por Cadenas)", "green");
+            }
+
+            function validarCorreoRegExp() {
+                var email = document.getElementById("correo").value.trim();
+                var regex = /^[^\s@]+@([^\s@.]+\.)+[^\s@.]+$/;
+                if (email.search(regex) !== -1) {
+                    mostrarMensajeCorreo("Válida (Verificado por RegExp)", "green");
+                } else {
+                    mostrarMensajeCorreo("Inválida (Formato incorrecto según RegExp)", "red");
+                }
+            }
+
+            function mostrarMensajeCorreo(mensaje, color) {
+                var resultado = document.getElementById("resultado_correo");
+                resultado.innerHTML = mensaje;
+                resultado.style.color = color;
+                resultado.style.fontWeight = "bold";
+            }
+        </script>
+    </body>
+</html>

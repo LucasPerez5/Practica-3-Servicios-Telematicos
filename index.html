@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Practica 1 - Servicios Telematicos</title>
+        <link rel="stylesheet" href="css/iroom.css">
+    </head>
+
+    <body>
+        <main>
+        <header>  
+            <h1>Smart Room Project</h1>
+        </header>
+        <div class="menu-info">
+            <nav>
+                <ul>
+                    <li><a href="#">Inicio</a></li>
+                    <li><a href="#">Habitación</a></li>
+                    <li><a href="#">Sensores</a></li>
+                    <li><a href="minombre.html">Nombre</a></li> <!-- Enlace a config -->
+                    <li><a href="config.html">Configuracion</a></li>
+                    <li><a href="calculadora.html">Calculadora</a></li>
+                </ul>
+            </nav>
+            <aside>
+                <p id="mensajeSaludo" class="saludo-destacado"></p> <!-- Mensaje de saludo dinámico -->
+            </aside>
+        </div>
+        <div class="contenedor-columnas">
+            <section>
+                <h2>Datos de la Sala de Entrenamiento</h2>
+
+                <a href="https://maps.app.goo.gl/2K3mXs5ypeegAjQQ9" target="_blank">Ubicación Instalaciones Deportivas UAH</a>
+                <ul>
+                    <li>Superficie: Alfombras de goma protectoras antigolpes </li>
+                    <li>Equipamiento: Banco inclinable, gomas elasticas y cajones pliométricos </li>
+                    <li>Material de fuerza: Mancuernas hexagonales y estación de poleas </li>
+                </ul>
+                <img src="sala.jpg" alt="Sala de preparación física equipada con material de entrenamiento">
+            </section>
+            <section>
+                <h2>Estado del Sistema</h2>
+                <ul>
+                    <li>Conexión a red WiFi: Estable</li>
+                    <li>Última actualización: Hace 2 min</li>
+                    <li>Batería general sensores: 85%</li>
+                </ul>
+
+                <br>
+                
+                <h2>Datos de los sensores</h2>
+                <ul>
+                    <li>Sensor de temperatura y humedad</li>
+                    <li>Detector de presencia por infrarrojos</li>
+                    <li>Medidor de luminosidad para ajustar luz ambiental en sesiones de estiramiento</li>
+                </ul>
+            </section>
+        </div>
+        <footer> Universidad de Alcalá </footer>
+        </main>
+
+        <script>
+            var nombreGuardado = localStorage.getItem("fname"); /* Sacamos e nombre del storage */
+
+            if (nombreGuardado != null) { /* Verificamos si hay un nombre guardado */
+                document.getElementById("mensajeSaludo").innerText = "Hola " + nombreGuardado + ": Bienvenido a Smart Room.";
+            }
+        </script>
+    </body>    
+</html>

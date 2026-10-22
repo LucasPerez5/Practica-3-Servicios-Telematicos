@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora de Temperaturas</title>
+    <link rel="stylesheet" href="css/iroom.css">
+</head>
+<body>
+    <main>
+        <header>  
+            <h1>Calculadora de Temperaturas</h1>
+        </header>
+
+        <section class="seccion-centrada">
+            <div class="contenedor-dual">
+                
+                <div class="calculadora">
+                    <input type="text" id="pantalla" class="pantalla" readonly value="0">
+                    <div id="unidad_actual" class="info-unidad">Unidad: Celsius (ºC)</div>
+
+                    <div class="botonera">
+                        <button type="button" class="conversor" onclick="convertirUnidad('C')">Celsius</button>
+                        <button type="button" class="conversor" onclick="convertirUnidad('K')">Kelvin</button>
+                        <button type="button" class="conversor-ancho" onclick="convertirUnidad('F')">Fahrenheit</button>
+                        
+                        <button type="button" class="numero" onclick="addNumero('7')">7</button>
+                        <button type="button" class="numero" onclick="addNumero('8')">8</button>
+                        <button type="button" class="numero" onclick="addNumero('9')">9</button>
+                        <button type="button" class="operador" onclick="addOperador('/')">÷</button>
+
+                        <button type="button" class="numero" onclick="addNumero('4')">4</button>
+                        <button type="button" class="numero" onclick="addNumero('5')">5</button>
+                        <button type="button" class="numero" onclick="addNumero('6')">6</button>
+                        <button type="button" class="operador" onclick="addOperador('*')">×</button>
+
+                        <button type="button" class="numero" onclick="addNumero('1')">1</button>
+                        <button type="button" class="numero" onclick="addNumero('2')">2</button>
+                        <button type="button" class="numero" onclick="addNumero('3')">3</button>
+                        <button type="button" class="operador" onclick="addOperador('-')">-</button>
+
+                        <button type="button" class="numero" onclick="addNumero('0')">0</button>
+                        <button type="button" class="numero" onclick="addNumero('.')">.</button>
+                        <button type="button" class="numero" onclick="borrarPantalla()">C</button>
+                        <button type="button" class="operador" onclick="addOperador('+')">+</button>
+
+                        <button type="button" class="igual" onclick="calcularResultado()">=</button>
+                    </div>
+                </div>
+
+                <div class="calculadora">
+                    <div id="contenedor_historial">
+                        <h4>Historial de Operaciones</h4>
+                        <ul id="lista_historial"></ul>
+                        <button type="button" class="btn-limpiar-historial" onclick="limpiarHistorial()">Limpiar Historial</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <footer>
+            <a href="index.html">Volver a la página principal</a>
+            <br><br>
+            Universidad de Alcalá
+        </footer>
+    </main>
+
+    <script>
+        var operacionPendiente = "";
+        var operandoAnterior = "";
+        var unidad = "C"; 
+        var nuevaEntrada = true; 
+
+        function actualizarUnidadDOM() {
+            var texto = "Unidad: ";
+            if (unidad === "C") texto = texto + "Celsius (ºC)";
+            else if (unidad === "K") texto = texto + "Kelvin (K)";
+            else if (unidad === "F") texto = texto + "Fahrenheit (ºF)";
+            document.getElementById("unidad_actual").innerHTML = texto;
+        }
+
+        function addNumero(num) {
+            var pantalla = document.getElementById("pantalla");
+
+            // Evitar varios puntos decimales en el mismo número
+            if (num === "." && pantalla.value.indexOf(".") !== -1 && !nuevaEntrada) {
+                return;
+            }
+
+            if (pantalla.value === "0" || nuevaEntrada) {
+                if (num === ".") {
+                    pantalla.value = "0.";
+                } else {
+                    pantalla.value = num;
+                }
+                nuevaEntrada = false;
+            } else {
+                pantalla.value = pantalla.value + num;
+            }
+        }
+
+        function addOperador(op) {
+            var pantalla = document.getElementById("pantalla");
+            if (isNaN(parseFloat(pantalla.value))) {
+                borrarPantalla();
+                return;
+            }
+            if (operacionPendiente !== "" && !nuevaEntrada) {
+                calcularResultado();
+            }
+            operandoAnterior = pantalla.value;
+            operacionPendiente = op;
+            nuevaEntrada = true;
+        }
+
+        function calcularResultado() {
+            if (operacionPendiente === "") return;
+            
+            var pantalla = document.getElementById("pantalla");
+            var actual = parseFloat(pantalla.value);
+            var anterior = parseFloat(operandoAnterior);
+            var resultado = 0;
+
+            if (operacionPendiente === "+") resultado = anterior + actual;
+            if (operacionPendiente === "-") resultado = anterior - actual;
+            if (operacionPendiente === "*") resultado = anterior * actual;
+            if (operacionPendiente === "/") {
+                if (actual === 0) {
+                    pantalla.value = "Error: Div / 0";
+                    operacionPendiente = "";
+                    operandoAnterior = "";
+                    nuevaEntrada = true;
+                    return;
+                }
+                resultado = anterior / actual;
+            }
+
+            resultado = Number(resultado.toFixed(2));
+            agregarAlHistorial(anterior, operacionPendiente, actual, resultado);
+
+            pantalla.value = resultado;
+            operacionPendiente = "";
+            operandoAnterior = "";
+            nuevaEntrada = true;
+        }
+
+        function borrarPantalla() {
+            document.getElementById("pantalla").value = "0";
+            operacionPendiente = "";
+            operandoAnterior = "";
+            nuevaEntrada = true;
+        }
+
+        function pasarAOtraUnidad(valor, origen, destino) {
+            var enCelsius = valor;
+            if (origen === "K") {
+                enCelsius = valor - 273.15;
+            } else if (origen === "F") {
+                enCelsius = (valor - 32) * 5 / 9;
+            }
+
+            if (destino === "C") return enCelsius;
+            if (destino === "K") return enCelsius + 273.15;
+            if (destino === "F") return (enCelsius * 9 / 5) + 32;
+            return valor;
+        }
+
+        function convertirUnidad(nuevaUnidad) {
+            if (unidad === nuevaUnidad) return; 
+
+            var pantalla = document.getElementById("pantalla");
+            var valorActual = parseFloat(pantalla.value);
+            if (isNaN(valorActual)) return;
+
+            var valorConvertido = pasarAOtraUnidad(valorActual, unidad, nuevaUnidad);
+
+            // Si había un operando guardado esperando operación, lo convertimos también
+            if (operandoAnterior !== "") {
+                var antConvertido = pasarAOtraUnidad(parseFloat(operandoAnterior), unidad, nuevaUnidad);
+                operandoAnterior = Number(antConvertido.toFixed(2));
+            }
+
+            unidad = nuevaUnidad;
+            pantalla.value = Number(valorConvertido.toFixed(2));
+            actualizarUnidadDOM();
+            nuevaEntrada = true; 
+        }
+
+        function agregarAlHistorial(num1, op, num2, res) {
+            var lista = document.getElementById("lista_historial");
+            var texto = num1 + " " + op + " " + num2 + " = " + res + " " + unidad;
+            
+            var nuevoItem = document.createElement("li");
+            var nodoTexto = document.createTextNode(texto);
+            nuevoItem.appendChild(nodoTexto);
+            lista.appendChild(nuevoItem);
+        }
+
+        function limpiarHistorial() {
+            var lista = document.getElementById("lista_historial");
+            while (lista.childNodes.length > 0) {
+                lista.removeChild(lista.childNodes[0]);
+            }
+        }
+    </script>
+</body>
+</html>
