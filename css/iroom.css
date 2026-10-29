@@ -372,3 +372,95 @@ img {
     z-index: 1000;
     box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
 }
+
+/* =========================================
+   ESTILOS PARA TABLAS PAGINADAS (tablas.html)
+   ========================================= */
+
+.contenedor-tabla {
+    display: none; /* Se ocultan por defecto, jQuery mostrará la primera */
+    width: 100%;
+    overflow-x: auto;
+}
+
+.paginacion {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 2px solid #e0e0e0;
+}
+
+.paginacion a {
+    display: inline-block;
+    margin: 0 5px;
+    padding: 8px 16px;
+    background-color: #e0e8d8;
+    color: #003366;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid #999;
+    font-weight: bold;
+}
+
+.paginacion a:hover, .paginacion a.activo {
+    background-color: #005baa;
+    color: white;
+}
+
+/* =========================================
+   ESTILOS PARA EL HISTOGRAMA (Apartado 2.3)
+   ========================================= */
+#contenedor-histograma {
+    display: none; /* Oculto hasta que se marque un checkbox */
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #fcfcfc;
+    border: 2px solid #005baa;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.hist-titulo {
+    text-align: center;
+    color: #003366;
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.hist-fila {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.hist-etiqueta {
+    width: 120px;
+    font-weight: bold;
+    text-align: right;
+    padding-right: 15px;
+    color: #333;
+}
+
+.hist-barra-fondo {
+    flex-grow: 1;
+    background-color: #e0e8d8;
+    border-radius: 4px;
+    height: 30px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+}
+
+.hist-barra {
+    height: 100%;
+    background-color: #8fa8c8;
+    color: #003366;
+    text-align: right;
+    padding-right: 10px;
+    line-height: 30px;
+    font-weight: bold;
+    font-size: 14px;
+    white-space: nowrap;
+    width: 0%; /* Inicia en 0 para la animación jQuery */
+    transition: width 0.8s ease-out; /* Animación fluida al crecer */
+}

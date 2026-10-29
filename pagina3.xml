@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<estaciones>
+    <estacion>
+        <ciudad>Sevilla</ciudad><temp>38</temp><humedad>25</humedad><ruido>180</ruido><luz>250</luz><color>FF5500</color>
+    </estacion>
+    <estacion>
+        <ciudad>Valencia</ciudad><temp>29</temp><humedad>70</humedad><ruido>170</ruido><luz>210</luz><color>00FF55</color>
+    </estacion>
+    <estacion>
+        <ciudad>Zaragoza</ciudad><temp>20</temp><humedad>45</humedad><ruido>120</ruido><luz>160</luz><color>000000</color>
+    </estacion>
+    <estacion>
+        <ciudad>Bilbao</ciudad><temp>16</temp><humedad>80</humedad><ruido>140</ruido><luz>90</luz><color>0000FF</color>
+    </estacion>
+    <estacion>
+        <ciudad>Málaga</ciudad><temp>32</temp><humedad>65</humedad><ruido>190</ruido><luz>240</luz><color>FFFFFF</color>
+    </estacion>
+</estaciones>

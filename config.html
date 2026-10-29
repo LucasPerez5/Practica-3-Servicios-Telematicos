@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Configuración - Smart Room</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <link rel="stylesheet" href="css/iroom.css">
     </head>
 
@@ -21,18 +22,20 @@
                         
                         <p>
                             <label for="pais">País:</label><br>
-                            <input list="lista-paises" id="pais" name="pais">
-                            <datalist id="lista-paises">
-                                <option value="España">
-                                <option value="Francia">
-                                <option value="Portugal">
-                                <option value="Italia">
-                            </datalist>
+                            <select id="pais" name="pais">
+                                <option value="">-- Seleccione un país --</option>
+                                <option value="espana">España</option> //cambiar espana por españa
+                                <option value="francia">Francia</option>
+                                <option value="portugal">Portugal</option>
+                                <option value="italia">Italia</option>
+                            </select>
                         </p>
 
                         <p>
                             <label for="ciudad">Ciudad:</label><br>
-                            <input type="text" id="ciudad" name="ciudad">
+                            <select id="ciudad" name="ciudad">
+                                <option value="">Seleccione país primero</option>
+                            </select>
                         </p>
 
                         <p>
@@ -325,6 +328,43 @@
                 resultado.style.color = color;
                 resultado.style.fontWeight = "bold";
             }
+
+            $(document).ready(function() {
+                $('#pais').change(function() {
+                    var paisSeleccionado = $(this).val();
+                    var selectCiudad = $('#ciudad');
+                    
+                    // Vaciamos el desplegable de ciudades
+                    selectCiudad.empty(); 
+                    
+                    if(paisSeleccionado === "") {
+                        selectCiudad.append('<option value="">Seleccione país primero</option>');
+                        return;
+                    }
+
+                    // Construimos el nombre del archivo en base al value del select
+                    var nombreArchivo = 'ciudades_' + paisSeleccionado + '.txt';
+
+                    // Petición AJAX para leer el archivo de texto plano
+                    $.ajax({
+                        url: nombreArchivo,
+                        type: 'GET',
+                        dataType: 'text',
+                        success: function(datos) {
+                            // Separamos el texto por las comas para obtener cada ciudad individual
+                            var ciudades = datos.split(',');
+                            
+                            $.each(ciudades, function(index, ciudadStr) {
+                                var ciudadLimpia = ciudadStr.trim();
+                                selectCiudad.append('<option value="' + ciudadLimpia + '">' + ciudadLimpia + '</option>');
+                            });
+                        },
+                        error: function() {
+                            selectCiudad.append('<option value="">Error de conexión al servidor</option>');
+                        }
+                    });
+                });
+            });
         </script>
 
         <div id="miModal">

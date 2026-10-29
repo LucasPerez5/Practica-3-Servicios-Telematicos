@@ -1,0 +1,7 @@
+[
+    {"ciudad": "Murcia", "temp": 34, "humedad": 55, "ruido": 160, "luz": 220, "color": "FF0000"},
+    {"ciudad": "Palma", "temp": 30, "humedad": 68, "ruido": 150, "luz": 230, "color": "00FF00"},
+    {"ciudad": "Las Palmas", "temp": 24, "humedad": 75, "ruido": 130, "luz": 250, "color": "FFFFFF"},
+    {"ciudad": "Toledo", "temp": 33, "humedad": 35, "ruido": 110, "luz": 210, "color": "000000"},
+    {"ciudad": "Vigo", "temp": 17, "humedad": 85, "ruido": 145, "luz": 100, "color": "0000FF"}
+]

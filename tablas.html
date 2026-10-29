@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tablas de Estaciones - Smart Room</title>
+    <link rel="stylesheet" href="css/iroom.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <main>
+        <header>  
+            <h1>Registros Meteorológicos</h1>
+        </header>
+
+        <div class="menu-info">
+            <nav>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="#">Habitación</a></li>
+                    <li><a href="#">Sensores</a></li>
+                    <li><a href="minombre.html">Nombre</a></li>
+                    <li><a href="config.html">Configuración</a></li>
+                    <li><a href="calculadora.html">Calculadora</a></li>
+                    <li><a href="galeria.html">Galería</a></li>
+                    <li><a href="tablas.html">Tablas</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <section class="seccion-centrada">
+            <h2>Datos de las 20 estaciones monitorizadas</h2>
+            
+            <!-- CONTENEDOR PÁGINA 1 -->
+            <div id="pagina-1" class="contenedor-tabla">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ciudad</th>
+                            <th>Temperatura (ºC)<br><input type="checkbox" class="chk-columna" data-col="1" data-nombre="Temperatura (ºC)"></th>
+                            <th>Humedad (%)<br><input type="checkbox" class="chk-columna" data-col="2" data-nombre="Humedad (%)"></th>
+                            <th>Ruido<br><input type="checkbox" class="chk-columna" data-col="3" data-nombre="Ruido"></th>
+                            <th>Nivel de luz<br><input type="checkbox" class="chk-columna" data-col="4" data-nombre="Nivel de luz"></th>
+                            <th>Color de Iluminación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Alcalá de H.</td><td>25</td><td>48</td><td>150</td><td>120</td><td>000000</td></tr>
+                        <tr><td>Alicante</td><td>30</td><td>69</td><td>180</td><td>211</td><td>FF0000</td></tr>
+                        <tr><td>Badajoz</td><td>35</td><td>30</td><td>50</td><td>150</td><td>00FF00</td></tr>
+                        <tr><td>Burgos</td><td>18</td><td>42</td><td>211</td><td>180</td><td>0000FF</td></tr>
+                        <tr><td>Córdoba</td><td>35</td><td>41</td><td>150</td><td>50</td><td>FFFFFF</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- CONTENEDOR PÁGINA 2 -->
+            <div id="pagina-2" class="contenedor-tabla">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ciudad</th>
+                            <th>Temperatura (ºC)<br><input type="checkbox" class="chk-columna" data-col="1" data-nombre="Temperatura (ºC)"></th>
+                            <th>Humedad (%)<br><input type="checkbox" class="chk-columna" data-col="2" data-nombre="Humedad (%)"></th>
+                            <th>Ruido<br><input type="checkbox" class="chk-columna" data-col="3" data-nombre="Ruido"></th>
+                            <th>Nivel de luz<br><input type="checkbox" class="chk-columna" data-col="4" data-nombre="Nivel de luz"></th>
+                            <th>Color de Iluminación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Serracines</td><td>22</td><td>45</td><td>90</td><td>110</td><td>000000</td></tr>
+                        <tr><td>Coslada</td><td>26</td><td>55</td><td>160</td><td>200</td><td>FF0000</td></tr>
+                        <tr><td>Madrid</td><td>28</td><td>40</td><td>200</td><td>220</td><td>0000FF</td></tr>
+                        <tr><td>Torrejón</td><td>24</td><td>50</td><td>140</td><td>180</td><td>00FF00</td></tr>
+                        <tr><td>Guadalajara</td><td>21</td><td>60</td><td>110</td><td>150</td><td>FFFFFF</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- CONTENEDOR PÁGINA 3 (Cargada vía XML) -->
+            <div id="pagina-3" class="contenedor-tabla">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ciudad</th>
+                            <th>Temperatura (ºC)<br><input type="checkbox" class="chk-columna" data-col="1" data-nombre="Temperatura (ºC)"></th>
+                            <th>Humedad (%)<br><input type="checkbox" class="chk-columna" data-col="2" data-nombre="Humedad (%)"></th>
+                            <th>Ruido<br><input type="checkbox" class="chk-columna" data-col="3" data-nombre="Ruido"></th>
+                            <th>Nivel de luz<br><input type="checkbox" class="chk-columna" data-col="4" data-nombre="Nivel de luz"></th>
+                            <th>Color de Iluminación</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpo-tabla-3"></tbody>
+                </table>
+            </div>
+
+            <!-- CONTENEDOR PÁGINA 4 (Cargada vía JSON) -->
+            <div id="pagina-4" class="contenedor-tabla">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ciudad</th>
+                            <th>Temperatura (ºC)<br><input type="checkbox" class="chk-columna" data-col="1" data-nombre="Temperatura (ºC)"></th>
+                            <th>Humedad (%)<br><input type="checkbox" class="chk-columna" data-col="2" data-nombre="Humedad (%)"></th>
+                            <th>Ruido<br><input type="checkbox" class="chk-columna" data-col="3" data-nombre="Ruido"></th>
+                            <th>Nivel de luz<br><input type="checkbox" class="chk-columna" data-col="4" data-nombre="Nivel de luz"></th>
+                            <th>Color de Iluminación</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpo-tabla-4"></tbody>
+                </table>
+            </div>
+
+            <!-- BOTONES DE PAGINACIÓN -->
+            <div class="paginacion">
+                <a data-target="#pagina-1">Página 1</a>
+                <a data-target="#pagina-2">Página 2</a>
+                <a data-target="#pagina-3">Página 3</a>
+                <a data-target="#pagina-4">Página 4</a>
+            </div>
+
+            <!-- CONTENEDOR DEL HISTOGRAMA (Apartado 2.3) -->
+            <div id="contenedor-histograma">
+                <div class="hist-titulo" id="titulo-histograma">Histograma</div>
+                <div id="area-barras"></div>
+            </div>
+
+        </section>
+
+        <footer>
+            <a href="index.html">Volver a la página principal</a>
+            <br><br>
+            Universidad de Alcalá
+        </footer>
+    </main>
+
+    <script>
+        $(document).ready(function() {
+            var cargadoPagina3 = false;
+            var cargadoPagina4 = false;
+
+            function formatearTabla(idContenedor) {
+                var tabla = $(idContenedor + ' table');
+                tabla.css({ 'width': '100%', 'border-collapse': 'collapse', 'margin-top': '10px' });
+                tabla.find('th').css({ 'background-color': '#005baa', 'color': 'white', 'padding': '12px', 'border': '1px solid #ccc' });
+                tabla.find('td').css({ 'padding': '10px', 'border': '1px solid #ccc', 'text-align': 'center' });
+                tabla.find('tbody tr:odd').css('background-color', '#f2f2f2');
+                tabla.find('tbody tr:even').css('background-color', '#ffffff');
+            }
+
+            // Inicializamos la página 1
+            $('#pagina-1').show();
+            formatearTabla('#pagina-1');
+            $('.paginacion a[data-target="#pagina-1"]').addClass('activo');
+
+            // Carga XML
+            function cargarXML(target) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "pagina3.xml", true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        var xmlDoc = xhr.responseXML;
+                        var estaciones = xmlDoc.getElementsByTagName("estacion");
+                        var html = "";
+                        for (var i = 0; i < estaciones.length; i++) {
+                            html += "<tr>";
+                            html += "<td>" + estaciones[i].getElementsByTagName("ciudad")[0].childNodes[0].nodeValue + "</td>";
+                            html += "<td>" + estaciones[i].getElementsByTagName("temp")[0].childNodes[0].nodeValue + "</td>";
+                            html += "<td>" + estaciones[i].getElementsByTagName("humedad")[0].childNodes[0].nodeValue + "</td>";
+                            html += "<td>" + estaciones[i].getElementsByTagName("ruido")[0].childNodes[0].nodeValue + "</td>";
+                            html += "<td>" + estaciones[i].getElementsByTagName("luz")[0].childNodes[0].nodeValue + "</td>";
+                            html += "<td>" + estaciones[i].getElementsByTagName("color")[0].childNodes[0].nodeValue + "</td>";
+                            html += "</tr>";
+                        }
+                        document.getElementById("cuerpo-tabla-3").innerHTML = html;
+                        cargadoPagina3 = true;
+                        formatearTabla(target);
+                    }
+                };
+                xhr.send();
+            }
+
+            // Carga JSON
+            function cargarJSON(target) {
+                $.ajax({
+                    url: 'pagina4.json',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(datos) {
+                        var html = "";
+                        $.each(datos, function(index, estacion) {
+                            html += "<tr>";
+                            html += "<td>" + estacion.ciudad + "</td>";
+                            html += "<td>" + estacion.temp + "</td>";
+                            html += "<td>" + estacion.humedad + "</td>";
+                            html += "<td>" + estacion.ruido + "</td>";
+                            html += "<td>" + estacion.luz + "</td>";
+                            html += "<td>" + estacion.color + "</td>";
+                            html += "</tr>";
+                        });
+                        $('#cuerpo-tabla-4').html(html);
+                        cargadoPagina4 = true;
+                        formatearTabla(target);
+                    },
+                    error: function() {
+                        $('#cuerpo-tabla-4').html('<tr><td colspan="6">Error al cargar datos JSON</td></tr>');
+                    }
+                });
+            }
+
+            // Lógica de Paginación
+            $('.paginacion a').click(function(e) {
+                e.preventDefault();
+                
+                // Ocultar histograma y desmarcar checks al cambiar de página
+                $('.chk-columna').prop('checked', false);
+                $('#contenedor-histograma').hide();
+                
+                $('.paginacion a').removeClass('activo');
+                $(this).addClass('activo');
+                $('.contenedor-tabla').hide();
+                
+                var target = $(this).data('target');
+                
+                if (target === '#pagina-3' && !cargadoPagina3) {
+                    $(target).fadeIn('fast');
+                    cargarXML(target);
+                } else if (target === '#pagina-4' && !cargadoPagina4) {
+                    $(target).fadeIn('fast');
+                    cargarJSON(target);
+                } else {
+                    $(target).fadeIn('fast', function() {
+                        formatearTabla(target);
+                    });
+                }
+            });
+
+            // Lógica del Histograma (Apartado 2.3)
+            $(document).on('change', '.chk-columna', function() {
+                var estaMarcado = $(this).prop('checked');
+                
+                // Desmarcar todos los demás checkboxes
+                $('.chk-columna').prop('checked', false);
+                
+                // Si el usuario lo ha marcado, lo volvemos a marcar y generamos gráfico
+                if (estaMarcado) {
+                    $(this).prop('checked', true);
+                    
+                    var colIndex = $(this).data('col');
+                    var colNombre = $(this).data('nombre');
+                    var tablaVisible = $('.contenedor-tabla:visible table');
+                    
+                    var datos = [];
+                    var maxValor = 0;
+                    
+                    // Extraer los datos de la tabla activa
+                    tablaVisible.find('tbody tr').each(function() {
+                        var ciudad = $(this).find('td').eq(0).text();
+                        var valor = parseFloat($(this).find('td').eq(colIndex).text()) || 0;
+                        
+                        if (valor > maxValor) maxValor = valor;
+                        datos.push({ ciudad: ciudad, valor: valor });
+                    });
+
+                    // Construir el HTML de las barras
+                    $('#titulo-histograma').text(colNombre);
+                    var htmlBarras = '';
+                    
+                    $.each(datos, function(i, item) {
+                        var porcentaje = maxValor === 0 ? 0 : (item.valor / maxValor) * 100;
+                        htmlBarras += '<div class="hist-fila">';
+                        htmlBarras += '<div class="hist-etiqueta">' + item.ciudad + '</div>';
+                        htmlBarras += '<div class="hist-barra-fondo">';
+                        htmlBarras += '<div class="hist-barra" data-width="' + porcentaje + '%">' + item.valor + '</div>';
+                        htmlBarras += '</div></div>';
+                    });
+
+                    $('#area-barras').html(htmlBarras);
+                    
+                    // Mostrar contenedor y animar las barras cambiando su width con jQuery
+                    $('#contenedor-histograma').fadeIn('fast', function() {
+                        $('.hist-barra').each(function() {
+                            $(this).css('width', $(this).data('width'));
+                        });
+                    });
+                } else {
+                    // Si el usuario desmarca la casilla, ocultamos el histograma
+                    $('#contenedor-histograma').fadeOut('fast');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
