@@ -24,6 +24,7 @@
                     <li><a href="calculadora.html">Calculadora</a></li>
                     <li><a href="galeria.html">Galería</a></li>
                     <li><a href="tablas.html">Tablas</a></li>
+                    <li><a href="graficas.html">Gráficas Pro</a></li>
                 </ul>
             </nav>
         </div>
@@ -31,85 +32,40 @@
         <section class="seccion-centrada">
             <h2>Datos de las 20 estaciones monitorizadas</h2>
             
-            <!-- CONTENEDOR PÁGINA 1 -->
-            <div id="pagina-1" class="contenedor-tabla">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Ciudad</th>
-                            <th>Temperatura (ºC)<br><input type="checkbox" class="chk-columna" data-col="1" data-nombre="Temperatura (ºC)"></th>
-                            <th>Humedad (%)<br><input type="checkbox" class="chk-columna" data-col="2" data-nombre="Humedad (%)"></th>
-                            <th>Ruido<br><input type="checkbox" class="chk-columna" data-col="3" data-nombre="Ruido"></th>
-                            <th>Nivel de luz<br><input type="checkbox" class="chk-columna" data-col="4" data-nombre="Nivel de luz"></th>
-                            <th>Color de Iluminación</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>Alcalá de H.</td><td>25</td><td>48</td><td>150</td><td>120</td><td>000000</td></tr>
-                        <tr><td>Alicante</td><td>30</td><td>69</td><td>180</td><td>211</td><td>FF0000</td></tr>
-                        <tr><td>Badajoz</td><td>35</td><td>30</td><td>50</td><td>150</td><td>00FF00</td></tr>
-                        <tr><td>Burgos</td><td>18</td><td>42</td><td>211</td><td>180</td><td>0000FF</td></tr>
-                        <tr><td>Córdoba</td><td>35</td><td>41</td><td>150</td><td>50</td><td>FFFFFF</td></tr>
-                    </tbody>
-                </table>
-            </div>
+            <table id="tabla-unica">
+                <thead>
+                    <tr>
+                        <th>Ciudad</th>
+                        <th>Temperatura (ºC)<br><input type="checkbox" class="chk-columna" data-col="1" data-nombre="Temperatura (ºC)"></th>
+                        <th>Humedad (%)<br><input type="checkbox" class="chk-columna" data-col="2" data-nombre="Humedad (%)"></th>
+                        <th>Ruido<br><input type="checkbox" class="chk-columna" data-col="3" data-nombre="Ruido"></th>
+                        <th>Nivel de luz<br><input type="checkbox" class="chk-columna" data-col="4" data-nombre="Nivel de luz"></th>
+                        <th>Color de Iluminación</th>
+                    </tr>
+                </thead>
+                
+                <!-- PÁGINA 1 -->
+                <tbody id="pagina-1" class="cuerpo-datos">
+                    <tr><td>Alcalá de H.</td><td>25</td><td>48</td><td>150</td><td>120</td><td>000000</td></tr>
+                    <tr><td>Serracines</td><td>22</td><td>45</td><td>90</td><td>110</td><td>000000</td></tr>
+                    <tr><td>Coslada</td><td>26</td><td>55</td><td>160</td><td>200</td><td>FF0000</td></tr>
+                    <tr><td>Torrejón</td><td>24</td><td>50</td><td>140</td><td>180</td><td>00FF00</td></tr>
+                    <tr><td>Madrid Centro</td><td>28</td><td>40</td><td>200</td><td>220</td><td>0000FF</td></tr>
+                </tbody>
 
-            <!-- CONTENEDOR PÁGINA 2 -->
-            <div id="pagina-2" class="contenedor-tabla">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Ciudad</th>
-                            <th>Temperatura (ºC)<br><input type="checkbox" class="chk-columna" data-col="1" data-nombre="Temperatura (ºC)"></th>
-                            <th>Humedad (%)<br><input type="checkbox" class="chk-columna" data-col="2" data-nombre="Humedad (%)"></th>
-                            <th>Ruido<br><input type="checkbox" class="chk-columna" data-col="3" data-nombre="Ruido"></th>
-                            <th>Nivel de luz<br><input type="checkbox" class="chk-columna" data-col="4" data-nombre="Nivel de luz"></th>
-                            <th>Color de Iluminación</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>Serracines</td><td>22</td><td>45</td><td>90</td><td>110</td><td>000000</td></tr>
-                        <tr><td>Coslada</td><td>26</td><td>55</td><td>160</td><td>200</td><td>FF0000</td></tr>
-                        <tr><td>Madrid</td><td>28</td><td>40</td><td>200</td><td>220</td><td>0000FF</td></tr>
-                        <tr><td>Torrejón</td><td>24</td><td>50</td><td>140</td><td>180</td><td>00FF00</td></tr>
-                        <tr><td>Guadalajara</td><td>21</td><td>60</td><td>110</td><td>150</td><td>FFFFFF</td></tr>
-                    </tbody>
-                </table>
-            </div>
+                <!-- PÁGINA 2 -->
+                <tbody id="pagina-2" class="cuerpo-datos">
+                    <tr><td>Guadalajara</td><td>21</td><td>60</td><td>110</td><td>150</td><td>FFFFFF</td></tr>
+                    <tr><td>O Grove</td><td>19</td><td>75</td><td>80</td><td>100</td><td>0000FF</td></tr>
+                    <tr><td>Santander</td><td>18</td><td>80</td><td>120</td><td>90</td><td>00FF00</td></tr>
+                    <tr><td>León</td><td>15</td><td>40</td><td>95</td><td>110</td><td>FF0000</td></tr>
+                    <tr><td>Cuenca</td><td>20</td><td>45</td><td>100</td><td>130</td><td>000000</td></tr>
+                </tbody>
 
-            <!-- CONTENEDOR PÁGINA 3 (Cargada vía XML) -->
-            <div id="pagina-3" class="contenedor-tabla">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Ciudad</th>
-                            <th>Temperatura (ºC)<br><input type="checkbox" class="chk-columna" data-col="1" data-nombre="Temperatura (ºC)"></th>
-                            <th>Humedad (%)<br><input type="checkbox" class="chk-columna" data-col="2" data-nombre="Humedad (%)"></th>
-                            <th>Ruido<br><input type="checkbox" class="chk-columna" data-col="3" data-nombre="Ruido"></th>
-                            <th>Nivel de luz<br><input type="checkbox" class="chk-columna" data-col="4" data-nombre="Nivel de luz"></th>
-                            <th>Color de Iluminación</th>
-                        </tr>
-                    </thead>
-                    <tbody id="cuerpo-tabla-3"></tbody>
-                </table>
-            </div>
-
-            <!-- CONTENEDOR PÁGINA 4 (Cargada vía JSON) -->
-            <div id="pagina-4" class="contenedor-tabla">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Ciudad</th>
-                            <th>Temperatura (ºC)<br><input type="checkbox" class="chk-columna" data-col="1" data-nombre="Temperatura (ºC)"></th>
-                            <th>Humedad (%)<br><input type="checkbox" class="chk-columna" data-col="2" data-nombre="Humedad (%)"></th>
-                            <th>Ruido<br><input type="checkbox" class="chk-columna" data-col="3" data-nombre="Ruido"></th>
-                            <th>Nivel de luz<br><input type="checkbox" class="chk-columna" data-col="4" data-nombre="Nivel de luz"></th>
-                            <th>Color de Iluminación</th>
-                        </tr>
-                    </thead>
-                    <tbody id="cuerpo-tabla-4"></tbody>
-                </table>
-            </div>
+                <!-- PÁGINA 3 y 4 (Vacías, se llenan por AJAX) -->
+                <tbody id="pagina-3" class="cuerpo-datos"></tbody>
+                <tbody id="pagina-4" class="cuerpo-datos"></tbody>
+            </table>
 
             <!-- BOTONES DE PAGINACIÓN -->
             <div class="paginacion">
@@ -139,21 +95,27 @@
             var cargadoPagina3 = false;
             var cargadoPagina4 = false;
 
-            function formatearTabla(idContenedor) {
-                var tabla = $(idContenedor + ' table');
-                tabla.css({ 'width': '100%', 'border-collapse': 'collapse', 'margin-top': '10px' });
+            // Ocultamos todos los cuerpos de tabla menos el primero al iniciar
+            $('.cuerpo-datos').hide();
+            $('#pagina-1').show();
+
+            // Función requerida: Formatear por selectores jQuery sin tocar CSS en HTML
+            function formatearTabla() {
+                var tabla = $('#tabla-unica');
+                tabla.css({ 'width': '100%', 'border-collapse': 'collapse', 'margin-top': '20px' });
                 tabla.find('th').css({ 'background-color': '#005baa', 'color': 'white', 'padding': '12px', 'border': '1px solid #ccc' });
                 tabla.find('td').css({ 'padding': '10px', 'border': '1px solid #ccc', 'text-align': 'center' });
-                tabla.find('tbody tr:odd').css('background-color', '#f2f2f2');
-                tabla.find('tbody tr:even').css('background-color', '#ffffff');
+                
+                // Formato Cebra (Zebra striping) aplicable solo a la página activa
+                tabla.find('.cuerpo-datos:visible tr:odd').css('background-color', '#f2f2f2');
+                tabla.find('.cuerpo-datos:visible tr:even').css('background-color', '#ffffff');
             }
 
-            // Inicializamos la página 1
-            $('#pagina-1').show();
-            formatearTabla('#pagina-1');
+            // Aplicamos formato inicial
+            formatearTabla();
             $('.paginacion a[data-target="#pagina-1"]').addClass('activo');
 
-            // Carga XML
+            // Carga XML (JavaScript Puro)
             function cargarXML(target) {
                 var xhr = new XMLHttpRequest();
                 xhr.open("GET", "pagina3.xml", true);
@@ -172,15 +134,15 @@
                             html += "<td>" + estaciones[i].getElementsByTagName("color")[0].childNodes[0].nodeValue + "</td>";
                             html += "</tr>";
                         }
-                        document.getElementById("cuerpo-tabla-3").innerHTML = html;
+                        document.getElementById("pagina-3").innerHTML = html;
                         cargadoPagina3 = true;
-                        formatearTabla(target);
+                        formatearTabla(); // Refresca colores de la tabla
                     }
                 };
                 xhr.send();
             }
 
-            // Carga JSON
+            // Carga JSON (jQuery)
             function cargarJSON(target) {
                 $.ajax({
                     url: 'pagina4.json',
@@ -198,12 +160,12 @@
                             html += "<td>" + estacion.color + "</td>";
                             html += "</tr>";
                         });
-                        $('#cuerpo-tabla-4').html(html);
+                        $('#pagina-4').html(html);
                         cargadoPagina4 = true;
-                        formatearTabla(target);
+                        formatearTabla(); // Refresca colores de la tabla
                     },
                     error: function() {
-                        $('#cuerpo-tabla-4').html('<tr><td colspan="6">Error al cargar datos JSON</td></tr>');
+                        $('#pagina-4').html('<tr><td colspan="6">Error al cargar datos JSON</td></tr>');
                     }
                 });
             }
@@ -218,10 +180,13 @@
                 
                 $('.paginacion a').removeClass('activo');
                 $(this).addClass('activo');
-                $('.contenedor-tabla').hide();
+                
+                // Ocultamos todos los cuerpos de la tabla
+                $('.cuerpo-datos').hide();
                 
                 var target = $(this).data('target');
                 
+                // Carga dinámica si es necesario, o solo mostrar
                 if (target === '#pagina-3' && !cargadoPagina3) {
                     $(target).fadeIn('fast');
                     cargarXML(target);
@@ -230,7 +195,7 @@
                     cargarJSON(target);
                 } else {
                     $(target).fadeIn('fast', function() {
-                        formatearTabla(target);
+                        formatearTabla();
                     });
                 }
             });
@@ -242,19 +207,18 @@
                 // Desmarcar todos los demás checkboxes
                 $('.chk-columna').prop('checked', false);
                 
-                // Si el usuario lo ha marcado, lo volvemos a marcar y generamos gráfico
                 if (estaMarcado) {
                     $(this).prop('checked', true);
                     
                     var colIndex = $(this).data('col');
                     var colNombre = $(this).data('nombre');
-                    var tablaVisible = $('.contenedor-tabla:visible table');
+                    var tbodyActivo = $('.cuerpo-datos:visible');
                     
                     var datos = [];
                     var maxValor = 0;
                     
-                    // Extraer los datos de la tabla activa
-                    tablaVisible.find('tbody tr').each(function() {
+                    // Extraer los datos de la página visible
+                    tbodyActivo.find('tr').each(function() {
                         var ciudad = $(this).find('td').eq(0).text();
                         var valor = parseFloat($(this).find('td').eq(colIndex).text()) || 0;
                         
@@ -284,7 +248,6 @@
                         });
                     });
                 } else {
-                    // Si el usuario desmarca la casilla, ocultamos el histograma
                     $('#contenedor-histograma').fadeOut('fast');
                 }
             });
