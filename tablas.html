@@ -15,18 +15,31 @@
 
         <section class="seccion-centrada">
             <h2>Datos de las 20 estaciones monitorizadas</h2>
-            
+
+            <div style="margin-bottom: 15px; text-align: right;">
+                <label for="buscador-ciudad"><b>Filtrar ciudad en esta página:</b> </label>
+                <input type="text" id="buscador-ciudad" placeholder="Ej: Alcalá, Vigo...">
+            </div>
+
             <table id="tabla-unica">
                 <thead>
-                    <tr>
-                        <th>Ciudad</th>
-                        <th>Temperatura (ºC)<br><input type="checkbox" class="chk-columna" data-col="1" data-nombre="Temperatura (ºC)"></th>
-                        <th>Humedad (%)<br><input type="checkbox" class="chk-columna" data-col="2" data-nombre="Humedad (%)"></th>
-                        <th>Ruido<br><input type="checkbox" class="chk-columna" data-col="3" data-nombre="Ruido"></th>
-                        <th>Nivel de luz<br><input type="checkbox" class="chk-columna" data-col="4" data-nombre="Nivel de luz"></th>
-                        <th>Color de Iluminación</th>
-                    </tr>
-                </thead>
+                <tr>
+                    <th>Ciudad</th>
+                    <th>Temperatura (ºC)</th>
+                    <th>Humedad (%)</th>
+                    <th>Ruido</th>
+                    <th>Nivel de luz</th>
+                    <th>Color de Iluminación</th>
+                </tr>
+                <tr>
+                    <td><b>Mostrar histograma</b></td>
+                    <td><input type="checkbox" class="chk-columna" value="1" title="Temperatura (ºC)"></td>
+                    <td><input type="checkbox" class="chk-columna" value="2" title="Humedad (%)"></td>
+                    <td><input type="checkbox" class="chk-columna" value="3" title="Ruido"></td>
+                    <td><input type="checkbox" class="chk-columna" value="4" title="Nivel de luz"></td>
+                    <td></td>
+                </tr>
+            </thead>
                 
                 <!-- PÁGINA 1 -->
                 <tbody id="pagina-1" class="cuerpo-datos">
@@ -63,6 +76,7 @@
             <div id="contenedor-histograma">
                 <div class="hist-titulo" id="titulo-histograma">Histograma</div>
                 <div id="area-barras"></div>
+                <p id="resumen-estadistico" style="font-weight: bold; color: #003366; margin-top: 15px;"></p>
             </div>
 
         </section>
@@ -78,162 +92,222 @@
         $(document).ready(function() {
             var cargadoPagina3 = false;
             var cargadoPagina4 = false;
+            /* Variables para almacenar los datos recibidos por AJAX (Nota Ap. 2.3) */
+            var datosPagina3XML = [];
+            var datosPagina4JSON = [];
 
-            // Ocultamos todos los cuerpos de tabla menos el primero al iniciar
             $('.cuerpo-datos').hide();
             $('#pagina-1').show();
 
-            // Función requerida: Formatear por selectores jQuery sin tocar CSS en HTML
+            /* Damos formato a la tabla usando selectores jQuery (Ap. 1.3) */
             function formatearTabla() {
-                var tabla = $('#tabla-unica');
-                tabla.css({ 'width': '100%', 'border-collapse': 'collapse', 'margin-top': '20px' });
-                tabla.find('th').css({ 'background-color': '#005baa', 'color': 'white', 'padding': '12px', 'border': '1px solid #ccc' });
-                tabla.find('td').css({ 'padding': '10px', 'border': '1px solid #ccc', 'text-align': 'center' });
-                
-                // Formato Cebra (Zebra striping) aplicable solo a la página activa
-                tabla.find('.cuerpo-datos:visible tr:odd').css('background-color', '#f2f2f2');
-                tabla.find('.cuerpo-datos:visible tr:even').css('background-color', '#ffffff');
-            }
+                $('#tabla-unica').css({
+                    'width': '100%',
+                    'border-collapse': 'collapse',
+                    'margin-top': '15px'
+                });
+                $('#tabla-unica th').css({
+                    'background-color': '#005baa',
+                    'color': 'white',
+                    'padding': '10px',
+                    'border': '1px solid #ccc'
+                });
+                $('#tabla-unica td').css({
+                    'padding': '8px',
+                    'border': '1px solid #ccc',
+                    'text-align': 'center'
+                });
 
-            // Aplicamos formato inicial
-            formatearTabla();
-            $('.paginacion a[data-target="#pagina-1"]').addClass('activo');
+                /* Filas pares e impares de la pagina visible (Diapo 7 jQuery) */
+                $('.cuerpo-datos:visible tr:odd').css('background-color', '#f2f2f2');
+                $('.cuerpo-datos:visible tr:even').css('background-color', '#ffffff');
 
-            // Carga XML (JavaScript Puro)
-            function cargarXML(target) {
-                var xhr = new XMLHttpRequest();
-                xhr.open("GET", "pagina3.xml", true);
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        var xmlDoc = xhr.responseXML;
-                        var estaciones = xmlDoc.getElementsByTagName("estacion");
-                        var html = "";
-                        for (var i = 0; i < estaciones.length; i++) {
-                            html += "<tr>";
-                            html += "<td>" + estaciones[i].getElementsByTagName("ciudad")[0].childNodes[0].nodeValue + "</td>";
-                            html += "<td>" + estaciones[i].getElementsByTagName("temp")[0].childNodes[0].nodeValue + "</td>";
-                            html += "<td>" + estaciones[i].getElementsByTagName("humedad")[0].childNodes[0].nodeValue + "</td>";
-                            html += "<td>" + estaciones[i].getElementsByTagName("ruido")[0].childNodes[0].nodeValue + "</td>";
-                            html += "<td>" + estaciones[i].getElementsByTagName("luz")[0].childNodes[0].nodeValue + "</td>";
-                            html += "<td>" + estaciones[i].getElementsByTagName("color")[0].childNodes[0].nodeValue + "</td>";
-                            html += "</tr>";
-                        }
-                        document.getElementById("pagina-3").innerHTML = html;
-                        cargadoPagina3 = true;
-                        formatearTabla(); // Refresca colores de la tabla
-                    }
-                };
-                xhr.send();
-            }
-
-            // Carga JSON (jQuery)
-            function cargarJSON(target) {
-                $.ajax({
-                    url: 'pagina4.json',
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(datos) {
-                        var html = "";
-                        $.each(datos, function(index, estacion) {
-                            html += "<tr>";
-                            html += "<td>" + estacion.ciudad + "</td>";
-                            html += "<td>" + estacion.temp + "</td>";
-                            html += "<td>" + estacion.humedad + "</td>";
-                            html += "<td>" + estacion.ruido + "</td>";
-                            html += "<td>" + estacion.luz + "</td>";
-                            html += "<td>" + estacion.color + "</td>";
-                            html += "</tr>";
+                /* Mejora: Pintamos una muestra del color RGB en la sexta columna */
+                $('.cuerpo-datos:visible tr').each(function() {
+                    var celdaColor = $(this).find('td').eq(5);
+                    var hex = $.trim(celdaColor.text());
+                    if (hex.length === 6) {
+                        celdaColor.css({
+                            'border-left': '15px solid #' + hex,
+                            'font-family': 'monospace'
                         });
-                        $('#pagina-4').html(html);
-                        cargadoPagina4 = true;
-                        formatearTabla(); // Refresca colores de la tabla
-                    },
-                    error: function() {
-                        $('#pagina-4').html('<tr><td colspan="6">Error al cargar datos JSON</td></tr>');
                     }
                 });
             }
 
-            // Lógica de Paginación
+            formatearTabla();
+            $('.paginacion a:first').addClass('activo');
+
+            /* Apartado 2.2 (Parte 1): Carga de XML con XMLHttpRequest (Diapos 16-18 Ajax) */
+            function cargarXML() {
+                var xmlhttp;
+                if (window.XMLHttpRequest) {
+                    xmlhttp = new XMLHttpRequest();
+                } else {
+                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+
+                xmlhttp.onreadystatechange = function() {
+                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                        var docXML = xmlhttp.responseXML;
+                        var listaEstaciones = docXML.getElementsByTagName("estacion");
+                        var htmlFilas = "";
+                        datosPagina3XML = [];
+
+                        for (var i = 0; i < listaEstaciones.length; i++) {
+                            var c = listaEstaciones[i].getElementsByTagName("ciudad")[0].childNodes[0].nodeValue;
+                            var t = listaEstaciones[i].getElementsByTagName("temp")[0].childNodes[0].nodeValue;
+                            var h = listaEstaciones[i].getElementsByTagName("humedad")[0].childNodes[0].nodeValue;
+                            var r = listaEstaciones[i].getElementsByTagName("ruido")[0].childNodes[0].nodeValue;
+                            var l = listaEstaciones[i].getElementsByTagName("luz")[0].childNodes[0].nodeValue;
+                            var col = listaEstaciones[i].getElementsByTagName("color")[0].childNodes[0].nodeValue;
+
+                            /* Guardamos en la variable global para consultar luego */
+                            datosPagina3XML.push({ ciudad: c, valores: [0, parseFloat(t), parseFloat(h), parseFloat(r), parseFloat(l)] });
+
+                            htmlFilas += "<tr><td>" + c + "</td><td>" + t + "</td><td>" + h + "</td><td>" + r + "</td><td>" + l + "</td><td>" + col + "</td></tr>";
+                        }
+                        document.getElementById("pagina-3").innerHTML = htmlFilas;
+                        cargadoPagina3 = true;
+                        formatearTabla();
+                    }
+                };
+                xmlhttp.open("GET", "pagina3.xml", true);
+                xmlhttp.send(null);
+            }
+
+            /* Apartado 2.2 (Parte 2): Carga de JSON con jQuery (Diapo 21 Ajax) */
+            function cargarJSON() {
+                $.get("pagina4.json", function(respuesta) {
+                    /* Si el servidor devuelve texto lo parseamos con JSON.parse (Diapo 17 JSON) */
+                    var datos = (typeof respuesta === "string") ? JSON.parse(respuesta) : respuesta;
+                    var htmlFilas = "";
+                    datosPagina4JSON = [];
+
+                    $.each(datos, function(idx, est) {
+                        datosPagina4JSON.push({
+                            ciudad: est.ciudad,
+                            valores: [0, parseFloat(est.temp), parseFloat(est.humedad), parseFloat(est.ruido), parseFloat(est.luz)]
+                        });
+
+                        htmlFilas += "<tr><td>" + est.ciudad + "</td><td>" + est.temp + "</td><td>" + est.humedad + "</td><td>" + est.ruido + "</td><td>" + est.luz + "</td><td>" + est.color + "</td></tr>";
+                    });
+
+                    $('#pagina-4').html(htmlFilas);
+                    cargadoPagina4 = true;
+                    formatearTabla();
+                });
+            }
+
+            /* Cambio de pagina al pulsar en los enlaces */
             $('.paginacion a').click(function(e) {
                 e.preventDefault();
-                
-                // Ocultar histograma y desmarcar checks al cambiar de página
+                var destino = $(this).attr('href'); // mejor usar href="#pagina-1" en los <a>
+
                 $('.chk-columna').prop('checked', false);
                 $('#contenedor-histograma').hide();
-                
+                $('#buscador-ciudad').val('');
+
                 $('.paginacion a').removeClass('activo');
                 $(this).addClass('activo');
-                
-                // Ocultamos todos los cuerpos de la tabla
+
                 $('.cuerpo-datos').hide();
-                
-                var target = $(this).data('target');
-                
-                // Carga dinámica si es necesario, o solo mostrar
-                if (target === '#pagina-3' && !cargadoPagina3) {
-                    $(target).fadeIn('fast');
-                    cargarXML(target);
-                } else if (target === '#pagina-4' && !cargadoPagina4) {
-                    $(target).fadeIn('fast');
-                    cargarJSON(target);
+                $(destino).show();
+                $('.cuerpo-datos tr').show();
+
+                if (destino === '#pagina-3' && !cargadoPagina3) {
+                    cargarXML();
+                } else if (destino === '#pagina-4' && !cargadoPagina4) {
+                    cargarJSON();
                 } else {
-                    $(target).fadeIn('fast', function() {
-                        formatearTabla();
-                    });
+                    formatearTabla();
                 }
             });
 
-            // Lógica del Histograma (Apartado 2.3)
-            $(document).on('change', '.chk-columna', function() {
-                var estaMarcado = $(this).prop('checked');
-                
-                // Desmarcar todos los demás checkboxes
-                $('.chk-columna').prop('checked', false);
-                
-                if (estaMarcado) {
-                    $(this).prop('checked', true);
-                    
-                    var colIndex = $(this).data('col');
-                    var colNombre = $(this).data('nombre');
-                    var tbodyActivo = $('.cuerpo-datos:visible');
-                    
-                    var datos = [];
-                    var maxValor = 0;
-                    
-                    // Extraer los datos de la página visible
-                    tbodyActivo.find('tr').each(function() {
-                        var ciudad = $(this).find('td').eq(0).text();
-                        var valor = parseFloat($(this).find('td').eq(colIndex).text()) || 0;
-                        
-                        if (valor > maxValor) maxValor = valor;
-                        datos.push({ ciudad: ciudad, valor: valor });
-                    });
+            /* Apartado 2.3: Funcion que genera el histograma consultando variables o tabla */
+            function mostrarHistograma(numColumna, tituloColumna) {
+                $('#titulo-histograma').text(tituloColumna);
+                $('#area-barras').html('');
 
-                    // Construir el HTML de las barras
-                    $('#titulo-histograma').text(colNombre);
-                    var htmlBarras = '';
-                    
-                    $.each(datos, function(i, item) {
-                        var porcentaje = maxValor === 0 ? 0 : (item.valor / maxValor) * 100;
-                        htmlBarras += '<div class="hist-fila">';
-                        htmlBarras += '<div class="hist-etiqueta">' + item.ciudad + '</div>';
-                        htmlBarras += '<div class="hist-barra-fondo">';
-                        htmlBarras += '<div class="hist-barra" data-width="' + porcentaje + '%">' + item.valor + '</div>';
-                        htmlBarras += '</div></div>';
-                    });
+                var idActivo = $('.cuerpo-datos:visible').attr('id');
+                var listaDatos = [];
 
-                    $('#area-barras').html(htmlBarras);
-                    
-                    // Mostrar contenedor y animar las barras cambiando su width con jQuery
-                    $('#contenedor-histograma').fadeIn('fast', function() {
-                        $('.hist-barra').each(function() {
-                            $(this).css('width', $(this).data('width'));
-                        });
+                /* Si estamos en las pestañas AJAX, leemos de la variable guardada (Nota guion) */
+                if (idActivo === 'pagina-3' && datosPagina3XML.length > 0) {
+                    $.each(datosPagina3XML, function(i, item) {
+                        listaDatos.push({ ciudad: item.ciudad, valor: item.valores[numColumna] });
+                    });
+                } else if (idActivo === 'pagina-4' && datosPagina4JSON.length > 0) {
+                    $.each(datosPagina4JSON, function(i, item) {
+                        listaDatos.push({ ciudad: item.ciudad, valor: item.valores[numColumna] });
                     });
                 } else {
-                    $('#contenedor-histograma').fadeOut('fast');
+                    /* En paginas 1 y 2 estaticas lo sacamos de las filas visibles */
+                    $('.cuerpo-datos:visible tr:visible').each(function() {
+                        var c = $(this).find('td').eq(0).text();
+                        var v = parseFloat($(this).find('td').eq(numColumna).text());
+                        listaDatos.push({ ciudad: c, valor: v });
+                    });
                 }
+
+                /* Calculamos maximo, minimo y media (Mejora 2.4) */
+                var maximo = 0;
+                var suma = 0;
+                var minimo = listaDatos.length > 0 ? listaDatos[0].valor : 0;
+
+                $.each(listaDatos, function(i, d) {
+                    if (d.valor > maximo) maximo = d.valor;
+                    if (d.valor < minimo) minimo = d.valor;
+                    suma += d.valor;
+                });
+
+                var media = listaDatos.length > 0 ? (suma / listaDatos.length).toFixed(1) : 0;
+
+                /* Creamos los contenedores de cada barra y animamos su width con jQuery */
+                $.each(listaDatos, function(i, d) {
+                    var anchoPorcentaje = (maximo > 0) ? Math.round((d.valor / maximo) * 100) : 0;
+                    var fila = $('<div class="hist-fila"></div>');
+                    var etiq = $('<div class="hist-etiqueta">' + d.ciudad + '</div>');
+                    var fondo = $('<div class="hist-barra-fondo"></div>');
+                    var barra = $('<div class="hist-barra" style="width:0%;">' + d.valor + '</div>');
+
+                    fondo.append(barra);
+                    fila.append(etiq).append(fondo);
+                    $('#area-barras').append(fila);
+
+                    barra.animate({ width: anchoPorcentaje + '%' }, 500);
+                });
+
+                $('#resumen-estadistico').text("Resumen de la página -> Media: " + media + " | Máximo: " + maximo + " | Mínimo: " + minimo);
+                $('#contenedor-histograma').slideDown('fast');
+            }
+
+            /* Control de los checkboxes (solo uno activo a la vez) */
+            $('.chk-columna').click(function() {
+                var marcado = $(this).is(':checked');
+                $('.chk-columna').prop('checked', false);
+
+                if (marcado) {
+                    $(this).prop('checked', true);
+                    var col = parseInt($(this).val());
+                    var titulo = $(this).attr('title');
+                    mostrarHistograma(col, titulo);
+                } else {
+                    $('#contenedor-histograma').slideUp('fast');
+                }
+            });
+
+            /* Mejora 2.4: Buscador en tiempo real por nombre de estacion */
+            $('#buscador-ciudad').keyup(function() {
+                var texto = $(this).val().toLowerCase();
+                $('.cuerpo-datos:visible tr').each(function() {
+                    var nombreCiudad = $(this).find('td:first').text().toLowerCase();
+                    if (nombreCiudad.indexOf(texto) !== -1) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
             });
         });
     </script>

@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <title>Galería Meteorológica - Smart Room</title>
     <link rel="stylesheet" href="css/iroom.css">
-    
-    <!-- Importamos la librería jQuery obligatoria para la práctica -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 
 <body>
@@ -34,6 +32,14 @@
             </div>
             
             <div id="info-imagen"></div>
+
+            <!--Mejora:-->
+            <div id="visor-ampliado" style="display:none; margin-top: 25px; padding: 15px; border: 2px solid #005baa; border-radius: 8px; background-color: #f0f8ff;">
+                <h3 id="titulo-ampliado" style="color: #003366; margin-top: 0;"></h3>
+                <img id="img-ampliada" src="" alt="Vista ampliada" style="max-width: 550px; width: 100%; border: 2px solid #003366;">
+                <br><br>
+                <button type="button" id="btn-cerrar-visor">Cerrar vista ampliada</button>
+            </div>
         </section>
 
         <footer>
@@ -58,13 +64,18 @@
                 }
             );
 
-            $('.carrusel-contenedor img').mousemove(function(e) {
-                $('#info-imagen').css({
-                    top: e.pageY + 15 + 'px',
-                    left: e.pageX + 15 + 'px'
-                });
+            $('.carrusel-contenedor img').click(function() {
+                var ruta = $(this).attr('src');
+                var nombre = $(this).attr('alt');
+
+                $('#titulo-ampliado').text("Estación seleccionada: " + nombre);
+                $('#img-ampliada').attr('src', ruta);
+                $('#visor-ampliado').slideDown('fast');
             });
 
+            $('#btn-cerrar-visor').click(function() {
+                $('#visor-ampliado').slideUp('fast');
+            });
             var anchoDesplazamiento = 265;
 
             $('#btn-der').click(function() {

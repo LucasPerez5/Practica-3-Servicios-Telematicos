@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Configuración - Smart Room</title>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <link rel="stylesheet" href="css/iroom.css">
     </head>
 
@@ -24,7 +24,7 @@
                             <label for="pais">País:</label><br>
                             <select id="pais" name="pais">
                                 <option value="">-- Seleccione un país --</option>
-                                <option value="espana">España</option> //cambiar espana por españa
+                                <option value="espana">España</option> 
                                 <option value="francia">Francia</option>
                                 <option value="portugal">Portugal</option>
                                 <option value="italia">Italia</option>
@@ -132,7 +132,7 @@
         
         <script>
             var enviarFormularioPendiente = false;
-            var paisesValidos = ["españa", "francia", "italia", "portugal"];
+            var paisesValidos = ["espana", "francia", "italia", "portugal"];
 
             function calcular() {
                 var max = document.getElementById("temp_max").value;
@@ -331,38 +331,20 @@
 
             $(document).ready(function() {
                 $('#pais').change(function() {
-                    var paisSeleccionado = $(this).val();
-                    var selectCiudad = $('#ciudad');
-                    
-                    // Vaciamos el desplegable de ciudades
-                    selectCiudad.empty(); 
-                    
-                    if(paisSeleccionado === "") {
-                        selectCiudad.append('<option value="">Seleccione país primero</option>');
-                        return;
-                    }
+                    var pais = $(this).val();
+                    $('#ciudad').html('<option value="">Seleccione país primero</option>');
 
-                    // Construimos el nombre del archivo en base al value del select
-                    var nombreArchivo = 'ciudades_' + paisSeleccionado + '.txt';
-
-                    // Petición AJAX para leer el archivo de texto plano
-                    $.ajax({
-                        url: nombreArchivo,
-                        type: 'GET',
-                        dataType: 'text',
-                        success: function(datos) {
-                            // Separamos el texto por las comas para obtener cada ciudad individual
-                            var ciudades = datos.split(',');
-                            
-                            $.each(ciudades, function(index, ciudadStr) {
-                                var ciudadLimpia = ciudadStr.trim();
-                                selectCiudad.append('<option value="' + ciudadLimpia + '">' + ciudadLimpia + '</option>');
+                    if (pais !== "") {
+                        var fichero = "ciudades_" + pais + ".txt";
+                        $.get(fichero, function(datos) {
+                            $('#ciudad').html('');
+                            var lista = datos.split(',');
+                            $.each(lista, function(idx, elem) {
+                                var nombreCiudad = $.trim(elem);
+                                $('#ciudad').append('<option value="' + nombreCiudad + '">' + nombreCiudad + '</option>');
                             });
-                        },
-                        error: function() {
-                            selectCiudad.append('<option value="">Error de conexión al servidor</option>');
-                        }
-                    });
+                        });
+                    }
                 });
             });
         </script>
