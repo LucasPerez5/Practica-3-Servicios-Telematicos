@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Tablas de Estaciones - Smart Room</title>
     <link rel="stylesheet" href="css/iroom.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 
 <body>
@@ -41,7 +41,7 @@
                 </tr>
             </thead>
                 
-                <!-- PÁGINA 1 -->
+                <!--Pagina 1:-->
                 <tbody id="pagina-1" class="cuerpo-datos">
                     <tr><td>Alcalá de H.</td><td>25</td><td>48</td><td>150</td><td>120</td><td>000000</td></tr>
                     <tr><td>Serracines</td><td>22</td><td>45</td><td>90</td><td>110</td><td>000000</td></tr>
@@ -50,7 +50,7 @@
                     <tr><td>Madrid Centro</td><td>28</td><td>40</td><td>200</td><td>220</td><td>0000FF</td></tr>
                 </tbody>
 
-                <!-- PÁGINA 2 -->
+                <!--Pagina 2:-->
                 <tbody id="pagina-2" class="cuerpo-datos">
                     <tr><td>Guadalajara</td><td>21</td><td>60</td><td>110</td><td>150</td><td>FFFFFF</td></tr>
                     <tr><td>O Grove</td><td>19</td><td>75</td><td>80</td><td>100</td><td>0000FF</td></tr>
@@ -59,20 +59,20 @@
                     <tr><td>Cuenca</td><td>20</td><td>45</td><td>100</td><td>130</td><td>000000</td></tr>
                 </tbody>
 
-                <!-- PÁGINA 3 y 4 (Vacías, se llenan por AJAX) -->
+                <!--Pagina 3 y 4:-->
                 <tbody id="pagina-3" class="cuerpo-datos"></tbody>
                 <tbody id="pagina-4" class="cuerpo-datos"></tbody>
             </table>
 
-            <!-- BOTONES DE PAGINACIÓN -->
+            <!--Botones: -->
             <div class="paginacion">
-                <a data-target="#pagina-1">Página 1</a>
-                <a data-target="#pagina-2">Página 2</a>
-                <a data-target="#pagina-3">Página 3</a>
-                <a data-target="#pagina-4">Página 4</a>
+                <a href="#pagina-1">Página 1</a>
+                <a href="#pagina-2">Página 2</a>
+                <a href="#pagina-3">Página 3</a>
+                <a href="#pagina-4">Página 4</a>
             </div>
 
-            <!-- CONTENEDOR DEL HISTOGRAMA (Apartado 2.3) -->
+            <!--Contenedor histograma: -->
             <div id="contenedor-histograma">
                 <div class="hist-titulo" id="titulo-histograma">Histograma</div>
                 <div id="area-barras"></div>
@@ -92,14 +92,12 @@
         $(document).ready(function() {
             var cargadoPagina3 = false;
             var cargadoPagina4 = false;
-            /* Variables para almacenar los datos recibidos por AJAX (Nota Ap. 2.3) */
             var datosPagina3XML = [];
             var datosPagina4JSON = [];
 
             $('.cuerpo-datos').hide();
             $('#pagina-1').show();
 
-            /* Damos formato a la tabla usando selectores jQuery (Ap. 1.3) */
             function formatearTabla() {
                 $('#tabla-unica').css({
                     'width': '100%',
@@ -118,11 +116,9 @@
                     'text-align': 'center'
                 });
 
-                /* Filas pares e impares de la pagina visible (Diapo 7 jQuery) */
                 $('.cuerpo-datos:visible tr:odd').css('background-color', '#f2f2f2');
                 $('.cuerpo-datos:visible tr:even').css('background-color', '#ffffff');
 
-                /* Mejora: Pintamos una muestra del color RGB en la sexta columna */
                 $('.cuerpo-datos:visible tr').each(function() {
                     var celdaColor = $(this).find('td').eq(5);
                     var hex = $.trim(celdaColor.text());
@@ -138,7 +134,6 @@
             formatearTabla();
             $('.paginacion a:first').addClass('activo');
 
-            /* Apartado 2.2 (Parte 1): Carga de XML con XMLHttpRequest (Diapos 16-18 Ajax) */
             function cargarXML() {
                 var xmlhttp;
                 if (window.XMLHttpRequest) {
@@ -162,7 +157,6 @@
                             var l = listaEstaciones[i].getElementsByTagName("luz")[0].childNodes[0].nodeValue;
                             var col = listaEstaciones[i].getElementsByTagName("color")[0].childNodes[0].nodeValue;
 
-                            /* Guardamos en la variable global para consultar luego */
                             datosPagina3XML.push({ ciudad: c, valores: [0, parseFloat(t), parseFloat(h), parseFloat(r), parseFloat(l)] });
 
                             htmlFilas += "<tr><td>" + c + "</td><td>" + t + "</td><td>" + h + "</td><td>" + r + "</td><td>" + l + "</td><td>" + col + "</td></tr>";
@@ -176,10 +170,8 @@
                 xmlhttp.send(null);
             }
 
-            /* Apartado 2.2 (Parte 2): Carga de JSON con jQuery (Diapo 21 Ajax) */
             function cargarJSON() {
                 $.get("pagina4.json", function(respuesta) {
-                    /* Si el servidor devuelve texto lo parseamos con JSON.parse (Diapo 17 JSON) */
                     var datos = (typeof respuesta === "string") ? JSON.parse(respuesta) : respuesta;
                     var htmlFilas = "";
                     datosPagina4JSON = [];
@@ -199,10 +191,9 @@
                 });
             }
 
-            /* Cambio de pagina al pulsar en los enlaces */
             $('.paginacion a').click(function(e) {
                 e.preventDefault();
-                var destino = $(this).attr('href'); // mejor usar href="#pagina-1" en los <a>
+                var destino = $(this).attr('href'); 
 
                 $('.chk-columna').prop('checked', false);
                 $('#contenedor-histograma').hide();
@@ -224,7 +215,6 @@
                 }
             });
 
-            /* Apartado 2.3: Funcion que genera el histograma consultando variables o tabla */
             function mostrarHistograma(numColumna, tituloColumna) {
                 $('#titulo-histograma').text(tituloColumna);
                 $('#area-barras').html('');
@@ -232,7 +222,6 @@
                 var idActivo = $('.cuerpo-datos:visible').attr('id');
                 var listaDatos = [];
 
-                /* Si estamos en las pestañas AJAX, leemos de la variable guardada (Nota guion) */
                 if (idActivo === 'pagina-3' && datosPagina3XML.length > 0) {
                     $.each(datosPagina3XML, function(i, item) {
                         listaDatos.push({ ciudad: item.ciudad, valor: item.valores[numColumna] });
@@ -242,7 +231,6 @@
                         listaDatos.push({ ciudad: item.ciudad, valor: item.valores[numColumna] });
                     });
                 } else {
-                    /* En paginas 1 y 2 estaticas lo sacamos de las filas visibles */
                     $('.cuerpo-datos:visible tr:visible').each(function() {
                         var c = $(this).find('td').eq(0).text();
                         var v = parseFloat($(this).find('td').eq(numColumna).text());
@@ -250,7 +238,6 @@
                     });
                 }
 
-                /* Calculamos maximo, minimo y media (Mejora 2.4) */
                 var maximo = 0;
                 var suma = 0;
                 var minimo = listaDatos.length > 0 ? listaDatos[0].valor : 0;
@@ -263,7 +250,6 @@
 
                 var media = listaDatos.length > 0 ? (suma / listaDatos.length).toFixed(1) : 0;
 
-                /* Creamos los contenedores de cada barra y animamos su width con jQuery */
                 $.each(listaDatos, function(i, d) {
                     var anchoPorcentaje = (maximo > 0) ? Math.round((d.valor / maximo) * 100) : 0;
                     var fila = $('<div class="hist-fila"></div>');
@@ -282,7 +268,6 @@
                 $('#contenedor-histograma').slideDown('fast');
             }
 
-            /* Control de los checkboxes (solo uno activo a la vez) */
             $('.chk-columna').click(function() {
                 var marcado = $(this).is(':checked');
                 $('.chk-columna').prop('checked', false);
@@ -297,7 +282,7 @@
                 }
             });
 
-            /* Mejora 2.4: Buscador en tiempo real por nombre de estacion */
+            /* Mejora: */
             $('#buscador-ciudad').keyup(function() {
                 var texto = $(this).val().toLowerCase();
                 $('.cuerpo-datos:visible tr').each(function() {
